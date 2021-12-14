@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/silenceper/wechat/v2/util"
-	"github.com/silenceper/wechat/v2/work/contact"
+	"github.com/silenceper/wechat/v2/work/contact/xerror"
 	"github.com/silenceper/wechat/v2/work/context"
 )
 
@@ -26,11 +26,11 @@ type Department struct {
 }
 
 // NewDepartment 初始化企业微信部门实例
-func NewDepartment(ctx *context.Context) (client *Department, err error) {
+func NewDepartment(ctx *context.Context) (client *Department) {
 	client = &Department{
 		ctx: ctx,
 	}
-	return client, nil
+	return client
 }
 
 // Create 创建部门
@@ -52,7 +52,7 @@ func (r *Department) Create(options ReqDepartmentCreate) (info RespDepartmentCre
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -76,7 +76,7 @@ func (r *Department) Update(options ReqDepartmentUpdate) (info util.CommonError,
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -100,7 +100,7 @@ func (r *Department) Delete(id int) (info util.CommonError, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -124,7 +124,7 @@ func (r *Department) List(id int) (info RespDepartmentList, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -148,7 +148,7 @@ func (r *Department) AsyncBatchReplaceDepartment(options BatchAsyncReplacePartyR
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -172,7 +172,7 @@ func (r *Department) BatchGetAsyncJobResult(jobId string) (info BatchGetAsyncJob
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -200,7 +200,7 @@ func (r *Department) AsyncExportDepartment(options ReqAsyncExportDepartment) (in
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -224,7 +224,7 @@ func (r *Department) GetAsyncExportJobResult(jobId string) (info GetAsyncExportJ
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }

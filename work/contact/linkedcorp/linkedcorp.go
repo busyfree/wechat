@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/silenceper/wechat/v2/util"
-	"github.com/silenceper/wechat/v2/work/contact"
+	"github.com/silenceper/wechat/v2/work/contact/xerror"
 	"github.com/silenceper/wechat/v2/work/context"
 )
 
@@ -22,11 +22,11 @@ type LinkedCorp struct {
 }
 
 // NewLinkedCorp 初始化企业微信互联企业实例
-func NewLinkedCorp(ctx *context.Context) (client *LinkedCorp, err error) {
+func NewLinkedCorp(ctx *context.Context) (client *LinkedCorp) {
 	client = &LinkedCorp{
 		ctx: ctx,
 	}
-	return client, nil
+	return client
 }
 
 // GetPermList 获取应用的可见范围
@@ -48,7 +48,7 @@ func (r *LinkedCorp) GetPermList() (info AgentGetPermListResp, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -72,7 +72,7 @@ func (r *LinkedCorp) GetLinkedCorpUserDetail(options GetUserDetailReq) (info Get
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -96,7 +96,7 @@ func (r *LinkedCorp) GetLinkedCorpDepartmentUsers(options GetUserListReq) (info 
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -120,7 +120,7 @@ func (r *LinkedCorp) GetLinkedCorpDepartmentUserDetail(options GetUserListReq) (
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -144,7 +144,7 @@ func (r *LinkedCorp) GetDepartmentList(options GetDepartmentListReq) (info GetDe
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }

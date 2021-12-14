@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/silenceper/wechat/v2/util"
-	"github.com/silenceper/wechat/v2/work/contact"
+	"github.com/silenceper/wechat/v2/work/contact/xerror"
 	"github.com/silenceper/wechat/v2/work/context"
 )
 
@@ -24,11 +24,11 @@ type Tag struct {
 }
 
 // NewTag 初始化企业微信标签实例
-func NewTag(ctx *context.Context) (client *Tag, err error) {
+func NewTag(ctx *context.Context) (client *Tag) {
 	client = &Tag{
 		ctx: ctx,
 	}
-	return client, nil
+	return client
 }
 
 // Create 创建标签
@@ -50,7 +50,7 @@ func (r *Tag) Create(options ObjTag) (info RespTag, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -74,7 +74,7 @@ func (r *Tag) Update(options ObjTag) (info util.CommonError, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -98,7 +98,7 @@ func (r *Tag) Delete(id int) (info util.CommonError, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -122,7 +122,7 @@ func (r *Tag) List(id int) (info RespTagList, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -146,7 +146,7 @@ func (r *Tag) GetUsers(id int) (info RespTagGet, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -170,7 +170,7 @@ func (r *Tag) AddUsers(options ReqTagUser) (info RespTagUser, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -194,7 +194,7 @@ func (r *Tag) DeleteUsers(options ReqTagUser) (info RespTagUser, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }

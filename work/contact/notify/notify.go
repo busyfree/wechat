@@ -4,7 +4,7 @@ import (
 	"github.com/silenceper/wechat/v2/cache"
 	"github.com/silenceper/wechat/v2/credential"
 	"github.com/silenceper/wechat/v2/work/config"
-	"github.com/silenceper/wechat/v2/work/contact"
+	"github.com/silenceper/wechat/v2/work/contact/xerror"
 	"github.com/silenceper/wechat/v2/work/context"
 )
 
@@ -21,7 +21,7 @@ type Notify struct {
 // NewNotify 初始化通讯录回调实例
 func NewNotify(cfg *config.Config) (client *Notify, err error) {
 	if cfg.Cache == nil {
-		return nil, contact.NewSDKErr(50001)
+		return nil, xerror.NewSDKErr(50001)
 	}
 	// 初始化 AccessToken Handle
 	defaultAkHandle := credential.NewWorkAccessToken(cfg.CorpID, cfg.CorpSecret, credential.CacheKeyWorkPrefix, cfg.Cache)

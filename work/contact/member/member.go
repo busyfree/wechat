@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/silenceper/wechat/v2/util"
-	"github.com/silenceper/wechat/v2/work/contact"
+	"github.com/silenceper/wechat/v2/work/contact/xerror"
 	"github.com/silenceper/wechat/v2/work/context"
 )
 
@@ -37,11 +37,11 @@ type Member struct {
 }
 
 // NewMember 初始化企业微信成员实例
-func NewMember(ctx *context.Context) (client *Member, err error) {
+func NewMember(ctx *context.Context) (client *Member) {
 	client = &Member{
 		ctx: ctx,
 	}
-	return client, nil
+	return client
 }
 
 // Create 创建成员
@@ -63,7 +63,7 @@ func (r *Member) Create(options ReqMemberCreate) (info util.CommonError, err err
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -87,7 +87,7 @@ func (r *Member) Read(userId string) (info RespMemberRead, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -111,7 +111,7 @@ func (r *Member) Update(options ReqMemberUpdate) (info util.CommonError, err err
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -135,7 +135,7 @@ func (r *Member) Delete(userId string) (info RespMemberRead, err error) {
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -163,7 +163,7 @@ func (r *Member) DeleteBatchUserIds(options ReqMemberBatchDelete) (info util.Com
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -187,7 +187,7 @@ func (r *Member) GetMemberSimpleList(departmentId, fetchChild string) (info Resp
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -211,7 +211,7 @@ func (r *Member) GetMemberList(departmentId, fetchChild string) (info RespMember
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -235,7 +235,7 @@ func (r *Member) ConvertToOpenId(options ReqMemberConvertToOpenId) (info RespMem
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -259,7 +259,7 @@ func (r *Member) AuthSuccess(userId string) (info RespMemberDepartmentMemberDeta
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -291,7 +291,7 @@ func (r *Member) BatchInvite(options ReqMemberBatchInvite) (info RespMemberBatch
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -315,7 +315,7 @@ func (r *Member) GetJoinQRCode(sizeType int) (info RespMemberGetJoinQRCode, err 
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -339,7 +339,7 @@ func (r *Member) GetActiveStat(options ReqMemberGetActiveStat) (info RespMemberG
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -363,7 +363,7 @@ func (r *Member) AsyncBatchSyncUpdateUser(options AsyncBatchSyncUserReq) (info A
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -387,7 +387,7 @@ func (r *Member) AsyncBatchSyncReplaceUser(options AsyncBatchSyncUserReq) (info 
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -411,7 +411,7 @@ func (r *Member) BatchGetAsyncJobResult(jobId string) (info BatchGetAsyncJobResu
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -439,7 +439,7 @@ func (r *Member) AsyncExportSimpleUser(options ReqAsyncExportUser) (info AsyncJo
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -467,7 +467,7 @@ func (r *Member) AsyncExportUser(options ReqAsyncExportUser) (info AsyncJobResp,
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -495,7 +495,7 @@ func (r *Member) AsyncExportTagUsers(options ReqAsyncExportUser) (info AsyncJobR
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
@@ -519,7 +519,7 @@ func (r *Member) GetAsyncExportJobResult(jobId string) (info GetAsyncExportJobRe
 		return
 	}
 	if info.ErrCode != 0 {
-		return info, contact.NewSDKErr(info.ErrCode, info.ErrMsg)
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
 	}
 	return info, nil
 }
