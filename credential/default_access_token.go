@@ -115,7 +115,8 @@ func (ak *WorkAccessToken) GetAccessToken() (accessToken string, err error) {
 	// 加上lock，是为了防止在并发获取token时，cache刚好失效，导致从微信服务器上获取到不同token
 	ak.accessTokenLock.Lock()
 	defer ak.accessTokenLock.Unlock()
-	accessTokenCacheKey := fmt.Sprintf("%s_access_token_%s", ak.cacheKeyPrefix, ak.CorpID)
+	corpSecretMd5Key, _ := util.CalculateSign(ak.CorpSecret, "MD5", "")
+	accessTokenCacheKey := fmt.Sprintf("%s_access_token_%s_%s", ak.cacheKeyPrefix, ak.CorpID, corpSecretMd5Key)
 	val := ak.cache.Get(accessTokenCacheKey)
 	if val != nil {
 		accessToken = val.(string)
