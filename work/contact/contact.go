@@ -9,8 +9,8 @@ import (
 	"github.com/silenceper/wechat/v2/work/contact/member"
 	"github.com/silenceper/wechat/v2/work/contact/notify"
 	"github.com/silenceper/wechat/v2/work/contact/tag"
-	"github.com/silenceper/wechat/v2/work/contact/xerror"
 	"github.com/silenceper/wechat/v2/work/context"
+	"github.com/silenceper/wechat/v2/work/xerror"
 )
 
 // Contact 企业微信通讯录相关API

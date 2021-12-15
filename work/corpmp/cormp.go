@@ -1,8 +1,6 @@
 package corpmp
 
 import (
-	"github.com/silenceper/wechat/v2/credential"
-	"github.com/silenceper/wechat/v2/work/config"
 	"github.com/silenceper/wechat/v2/work/context"
 	"github.com/silenceper/wechat/v2/work/corpmp/auth"
 )
@@ -13,12 +11,7 @@ type CorpMP struct {
 }
 
 // NewCorpMP 实例化小程序API
-func NewCorpMP(cfg *config.Config) *CorpMP {
-	defaultAkHandle := credential.NewDefaultAccessToken(cfg.CorpID, cfg.CorpSecret, credential.CacheKeyWorkPrefix, cfg.Cache)
-	ctx := &context.Context{
-		Config:            cfg,
-		AccessTokenHandle: defaultAkHandle,
-	}
+func NewCorpMP(ctx *context.Context) *CorpMP {
 	return &CorpMP{ctx}
 }
 

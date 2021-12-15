@@ -4,8 +4,8 @@ import (
 	"github.com/silenceper/wechat/v2/cache"
 	"github.com/silenceper/wechat/v2/credential"
 	"github.com/silenceper/wechat/v2/work/config"
-	"github.com/silenceper/wechat/v2/work/contact/xerror"
 	"github.com/silenceper/wechat/v2/work/context"
+	"github.com/silenceper/wechat/v2/work/xerror"
 )
 
 // Notify 微信客服实例

@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/silenceper/wechat/v2/util"
-	"github.com/silenceper/wechat/v2/work/contact/xerror"
+	"github.com/silenceper/wechat/v2/work/xerror"
 )
 
 // SignatureOptions 微信服务器验证参数
