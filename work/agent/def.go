@@ -59,10 +59,10 @@ type MenuButton struct {
 }
 
 type ReqAgentMenuCreate struct {
-	Button MenuButton `json:"button"`
+	Button []MenuButton `json:"button"`
 }
 
 type RespAgentMenuGet struct {
 	util.CommonError
-	Button MenuButton `json:"button"`
+	Button []MenuButton `json:"button"`
 }

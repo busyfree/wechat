@@ -2,6 +2,7 @@ package agent
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/silenceper/wechat/v2/util"
@@ -107,6 +108,16 @@ func (r *Agent) MenuCreate(agentId int32, options ReqAgentMenuCreate) (info util
 		accessToken string
 		data        []byte
 	)
+	if len(options.Button) > 3 {
+		err = errors.New("一级菜单数组，个数应为1~3个")
+		return
+	}
+	for _, b := range options.Button {
+		if len(b.SubButton) > 5 {
+			err = errors.New("二级菜单数组，个数应为1~5个")
+			return
+		}
+	}
 	accessToken, err = r.ctx.GetAccessToken()
 	if err != nil {
 		return
