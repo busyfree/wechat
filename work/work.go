@@ -48,8 +48,8 @@ func (wk *Work) GetKF() (*kf.Client, error) {
 }
 
 // GetContact get contact
-func (wk *Work) GetContact() (*contact.Contact, error) {
-	return contact.NewContact(wk.ctx.Config)
+func (wk *Work) GetContact() *contact.Contact {
+	return contact.NewContact(wk.ctx)
 }
 
 // GetAgent get agent

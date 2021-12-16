@@ -10,3 +10,11 @@ type Context struct {
 	*config.Config
 	credential.AccessTokenHandle
 }
+
+func (ctx *Context) SetAPIDomain(domain string) {
+	ctx.APIDomain = domain
+}
+
+func (ctx *Context) GetAPIDomain() string {
+	return ctx.APIDomain
+}

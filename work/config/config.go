@@ -15,4 +15,5 @@ type Config struct {
 
 	Token          string `json:"token"`            // 微信客服回调配置，用于生成签名校验回调请求的合法性
 	EncodingAESKey string `json:"encoding_aes_key"` // 微信客服回调p配置，用于解密回调消息内容对应的密文
+	APIDomain      string `json:"api_domain"`
 }
