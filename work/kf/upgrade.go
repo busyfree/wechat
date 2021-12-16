@@ -8,12 +8,12 @@ import (
 )
 
 const (
-	//获取配置的专员与客户群
-	upgradeServiceConfigAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/customer/get_upgrade_service_config?access_token=%s"
+	// 获取配置的专员与客户群
+	upgradeServiceConfigAddr = "/cgi-bin/kf/customer/get_upgrade_service_config?access_token=%s"
 	// 为客户升级为专员或客户群服务
-	upgradeService = "https://qyapi.weixin.qq.com/cgi-bin/kf/customer/upgrade_service?access_token=%s"
-	//为客户取消推荐
-	upgradeServiceCancel = "https://qyapi.weixin.qq.com/cgi-bin/kf/customer/cancel_upgrade_service?access_token=%s"
+	upgradeService = "/cgi-bin/kf/customer/upgrade_service?access_token=%s"
+	// 为客户取消推荐
+	upgradeServiceCancel = "/cgi-bin/kf/customer/cancel_upgrade_service?access_token=%s"
 )
 
 // UpgradeServiceConfigSchema 获取配置的专员与客户群
@@ -38,7 +38,7 @@ func (r *Client) UpgradeServiceConfig() (info UpgradeServiceConfigSchema, err er
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(upgradeServiceConfigAddr, accessToken))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(upgradeServiceConfigAddr, accessToken))
 	if err != nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (r *Client) UpgradeService(options UpgradeServiceOptions) (info util.Common
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(upgradeService, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(upgradeService, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -110,7 +110,7 @@ func (r *Client) UpgradeMemberService(options UpgradeMemberServiceOptions) (info
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(upgradeService, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(upgradeService, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -144,7 +144,7 @@ func (r *Client) UpgradeGroupChatService(options UpgradeServiceGroupChatOptions)
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(upgradeService, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(upgradeService, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -173,7 +173,7 @@ func (r *Client) UpgradeServiceCancel(options UpgradeServiceCancelOptions) (info
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(upgradeServiceCancel, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(upgradeServiceCancel, accessToken), options)
 	if err != nil {
 		return
 	}

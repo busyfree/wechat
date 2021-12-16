@@ -10,13 +10,13 @@ import (
 )
 
 const (
-	tagCreateAddr     = "https://qyapi.weixin.qq.com/cgi-bin/tag/create?access_token=%s"
-	tagUpdateAddr     = "https://qyapi.weixin.qq.com/cgi-bin/tag/update?access_token=%s"
-	tagDeleteAddr     = "https://qyapi.weixin.qq.com/cgi-bin/tag/delete?access_token=%s&tagid=%d"
-	tagGetAddr        = "https://qyapi.weixin.qq.com/cgi-bin/tag/get?access_token=%s&tagid=%d"
-	tagAddUserAddr    = "https://qyapi.weixin.qq.com/cgi-bin/tag/addtagusers?access_token=%s"
-	tagDeleteUserAddr = "https://qyapi.weixin.qq.com/cgi-bin/tag/deltagusers?access_token=%s"
-	tagListAddr       = "https://qyapi.weixin.qq.com/cgi-bin/tag/list?access_token=%s&id=%d"
+	tagCreateAddr     = "/cgi-bin/tag/create?access_token=%s"
+	tagUpdateAddr     = "/cgi-bin/tag/update?access_token=%s"
+	tagDeleteAddr     = "/cgi-bin/tag/delete?access_token=%s&tagid=%d"
+	tagGetAddr        = "/cgi-bin/tag/get?access_token=%s&tagid=%d"
+	tagAddUserAddr    = "/cgi-bin/tag/addtagusers?access_token=%s"
+	tagDeleteUserAddr = "/cgi-bin/tag/deltagusers?access_token=%s"
+	tagListAddr       = "/cgi-bin/tag/list?access_token=%s&id=%d"
 )
 
 type Tag struct {
@@ -42,7 +42,7 @@ func (r *Tag) Create(options ObjTag) (info RespTag, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(tagCreateAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(tagCreateAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -66,7 +66,7 @@ func (r *Tag) Update(options ObjTag) (info util.CommonError, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(tagUpdateAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(tagUpdateAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (r *Tag) Delete(id int) (info util.CommonError, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(tagDeleteAddr, accessToken, id))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(tagDeleteAddr, accessToken, id))
 	if err != nil {
 		return
 	}
@@ -114,7 +114,7 @@ func (r *Tag) List(id int) (info RespTagList, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(tagListAddr, accessToken, id))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(tagListAddr, accessToken, id))
 	if err != nil {
 		return
 	}
@@ -138,7 +138,7 @@ func (r *Tag) GetUsers(id int) (info RespTagGet, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(tagGetAddr, accessToken, id))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(tagGetAddr, accessToken, id))
 	if err != nil {
 		return
 	}
@@ -162,7 +162,7 @@ func (r *Tag) AddUsers(options ReqTagUser) (info RespTagUser, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(tagAddUserAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(tagAddUserAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -186,7 +186,7 @@ func (r *Tag) DeleteUsers(options ReqTagUser) (info RespTagUser, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(tagDeleteUserAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(tagDeleteUserAddr, accessToken), options)
 	if err != nil {
 		return
 	}

@@ -11,14 +11,14 @@ import (
 )
 
 const (
-	departmentCreateAddr                = "https://qyapi.weixin.qq.com/cgi-bin/department/create?access_token=%s"
-	departmentUpdateAddr                = "https://qyapi.weixin.qq.com/cgi-bin/department/update?access_token=%s"
-	departmentDeleteAddr                = "https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token=%s&id=%d"
-	departmentListAddr                  = "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=%s&id=%d"
-	departmentAsyncReplacePartyListAddr = "https://qyapi.weixin.qq.com/cgi-bin/batch/replaceparty?access_token=%s"
-	getAsyncJobResultAddr               = "https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token=%s&jobid=%s"
-	departmentAsyncExportAddr           = "https://qyapi.weixin.qq.com/cgi-bin/export/department?access_token=%s"
-	getAsyncExportJobResultAddr         = "https://qyapi.weixin.qq.com/cgi-bin/export/get_result?access_token=%s&jobid=%s"
+	departmentCreateAddr                = "/cgi-bin/department/create?access_token=%s"
+	departmentUpdateAddr                = "/cgi-bin/department/update?access_token=%s"
+	departmentDeleteAddr                = "/cgi-bin/department/delete?access_token=%s&id=%d"
+	departmentListAddr                  = "/cgi-bin/department/list?access_token=%s&id=%d"
+	departmentAsyncReplacePartyListAddr = "/cgi-bin/batch/replaceparty?access_token=%s"
+	getAsyncJobResultAddr               = "/cgi-bin/batch/getresult?access_token=%s&jobid=%s"
+	departmentAsyncExportAddr           = "/cgi-bin/export/department?access_token=%s"
+	getAsyncExportJobResultAddr         = "/cgi-bin/export/get_result?access_token=%s&jobid=%s"
 )
 
 type Department struct {
@@ -44,7 +44,7 @@ func (r *Department) Create(options ReqDepartmentCreate) (info RespDepartmentCre
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(departmentCreateAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(departmentCreateAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -68,7 +68,7 @@ func (r *Department) Update(options ReqDepartmentUpdate) (info util.CommonError,
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(departmentUpdateAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(departmentUpdateAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (r *Department) Delete(id int) (info util.CommonError, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(departmentDeleteAddr, accessToken, id))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(departmentDeleteAddr, accessToken, id))
 	if err != nil {
 		return
 	}
@@ -116,7 +116,7 @@ func (r *Department) List(id int) (info RespDepartmentList, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(departmentListAddr, accessToken, id))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(departmentListAddr, accessToken, id))
 	if err != nil {
 		return
 	}
@@ -140,7 +140,7 @@ func (r *Department) AsyncBatchReplaceDepartment(options BatchAsyncReplacePartyR
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(departmentAsyncReplacePartyListAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(departmentAsyncReplacePartyListAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -164,7 +164,7 @@ func (r *Department) BatchGetAsyncJobResult(jobId string) (info BatchGetAsyncJob
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(getAsyncJobResultAddr, accessToken, jobId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(getAsyncJobResultAddr, accessToken, jobId))
 	if err != nil {
 		return
 	}
@@ -192,7 +192,7 @@ func (r *Department) AsyncExportDepartment(options ReqAsyncExportDepartment) (in
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(departmentAsyncExportAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(departmentAsyncExportAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -216,7 +216,7 @@ func (r *Department) GetAsyncExportJobResult(jobId string) (info GetAsyncExportJ
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(getAsyncExportJobResultAddr, accessToken, jobId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(getAsyncExportJobResultAddr, accessToken, jobId))
 	if err != nil {
 		return
 	}

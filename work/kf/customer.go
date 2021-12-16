@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	customerBatchGetAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/customer/batchget?access_token=%s"
+	customerBatchGetAddr = "/cgi-bin/kf/customer/batchget?access_token=%s"
 )
 
 // CustomerBatchGetOptions 客户基本信息获取请求参数
@@ -42,7 +42,7 @@ func (r *Client) CustomerBatchGet(options CustomerBatchGetOptions) (info Custome
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(customerBatchGetAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(customerBatchGetAddr, accessToken), options)
 	if err != nil {
 		return
 	}

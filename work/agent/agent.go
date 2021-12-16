@@ -11,12 +11,12 @@ import (
 )
 
 const (
-	agentGetAddr        = "https://qyapi.weixin.qq.com/cgi-bin/agent/get?access_token=%s&agentid=%d"
-	agentListAddr       = "https://qyapi.weixin.qq.com/cgi-bin/agent/list?access_token=%s"
-	agentSetAddr        = "https://qyapi.weixin.qq.com/cgi-bin/agent/set?access_token=%s"
-	agentMenuCreateAddr = "https://qyapi.weixin.qq.com/cgi-bin/menu/create?access_token=%s&agentid=%d"
-	agentMenuGetAddr    = "https://qyapi.weixin.qq.com/cgi-bin/menu/get?access_token=%s&agentid=%d"
-	agentMenuDeleteAddr = "https://qyapi.weixin.qq.com/cgi-bin/menu/delete?access_token=%s&agentid=%d"
+	agentGetAddr        = "/cgi-bin/agent/get?access_token=%s&agentid=%d"
+	agentListAddr       = "/cgi-bin/agent/list?access_token=%s"
+	agentSetAddr        = "/cgi-bin/agent/set?access_token=%s"
+	agentMenuCreateAddr = "/cgi-bin/menu/create?access_token=%s&agentid=%d"
+	agentMenuGetAddr    = "/cgi-bin/menu/get?access_token=%s&agentid=%d"
+	agentMenuDeleteAddr = "/cgi-bin/menu/delete?access_token=%s&agentid=%d"
 )
 
 // Agent 应用管理API
@@ -40,7 +40,7 @@ func (r *Agent) Get(agentId int32) (info RespGetAgent, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(agentGetAddr, accessToken, agentId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(agentGetAddr, accessToken, agentId))
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *Agent) List() (info RespListAgent, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(agentListAddr, accessToken))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(agentListAddr, accessToken))
 	if err != nil {
 		return
 	}
@@ -88,7 +88,7 @@ func (r *Agent) Set(options ReqAgentSet) (info util.CommonError, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(agentSetAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(agentSetAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -122,7 +122,7 @@ func (r *Agent) MenuCreate(agentId int32, options ReqAgentMenuCreate) (info util
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(agentMenuCreateAddr, accessToken, agentId), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(agentMenuCreateAddr, accessToken, agentId), options)
 	if err != nil {
 		return
 	}
@@ -146,7 +146,7 @@ func (r *Agent) MenuGet(agentId int32) (info RespAgentMenuGet, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(agentMenuGetAddr, accessToken, agentId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(agentMenuGetAddr, accessToken, agentId))
 	if err != nil {
 		return
 	}
@@ -170,7 +170,7 @@ func (r *Agent) MenuDelete(agentId int32) (info util.CommonError, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(agentMenuDeleteAddr, accessToken, agentId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(agentMenuDeleteAddr, accessToken, agentId))
 	if err != nil {
 		return
 	}

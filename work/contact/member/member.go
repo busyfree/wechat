@@ -11,25 +11,25 @@ import (
 )
 
 const (
-	userCreateAddr                    = "https://qyapi.weixin.qq.com/cgi-bin/user/create?access_token=%s"
-	userReadAddr                      = "https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s"
-	userUpdateAddr                    = "https://qyapi.weixin.qq.com/cgi-bin/user/update?access_token=%s"
-	userDeleteAddr                    = "https://qyapi.weixin.qq.com/cgi-bin/user/delete?access_token=%s&userid=%s"
-	userBatchDeleteAddr               = "https://qyapi.weixin.qq.com/cgi-bin/user/batchdelete?access_token=%s"
-	userSimpleListAddr                = "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?access_token=%s&department_id=%s&fetch_child=%s"
-	userListAddr                      = "https://qyapi.weixin.qq.com/cgi-bin/user/list?access_token=%s&department_id=%s&fetch_child=%s"
-	userConvertToOpenIdAdd            = "https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid?access_token=%s"
-	userAuthSuccessAddr               = "https://qyapi.weixin.qq.com/cgi-bin/user/authsucc?access_token=%s&userid=%s"
-	userBatchInviteAddr               = "https://qyapi.weixin.qq.com/cgi-bin/batch/invite?access_token=%s"
-	userGetCorpJoinQRCodeAddr         = "https://qyapi.weixin.qq.com/cgi-bin/corp/get_join_qrcode?access_token=%s&size_type=%d"
-	userGetActiveStatAddr             = "https://qyapi.weixin.qq.com/cgi-bin/user/get_active_stat?access_token=%s"
-	userAsyncBatchSyncUpdateUserAddr  = "https://qyapi.weixin.qq.com/cgi-bin/batch/syncuser?access_token=%s"
-	userAsyncBatchSyncReplaceUserAddr = "https://qyapi.weixin.qq.com/cgi-bin/batch/replaceuser?access_token=%s"
-	getAsyncJobResultAddr             = "https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token=%s&jobid=%s"
-	getAsyncExportJobResultAddr       = "https://qyapi.weixin.qq.com/cgi-bin/export/get_result?access_token=%s&jobid=%s"
-	userAsyncExportSimpleUserAddr     = "https://qyapi.weixin.qq.com/cgi-bin/export/simple_user?access_token=%s"
-	userAsyncExportUserAddr           = "https://qyapi.weixin.qq.com/cgi-bin/export/user?access_token=%s"
-	userAsyncExportTagUsersAddr       = "https://qyapi.weixin.qq.com/cgi-bin/export/taguser?access_token=%s"
+	userCreateAddr                    = "/cgi-bin/user/create?access_token=%s"
+	userReadAddr                      = "/cgi-bin/user/get?access_token=%s&userid=%s"
+	userUpdateAddr                    = "/cgi-bin/user/update?access_token=%s"
+	userDeleteAddr                    = "/cgi-bin/user/delete?access_token=%s&userid=%s"
+	userBatchDeleteAddr               = "/cgi-bin/user/batchdelete?access_token=%s"
+	userSimpleListAddr                = "/cgi-bin/user/simplelist?access_token=%s&department_id=%s&fetch_child=%s"
+	userListAddr                      = "/cgi-bin/user/list?access_token=%s&department_id=%s&fetch_child=%s"
+	userConvertToOpenIdAdd            = "/cgi-bin/user/convert_to_openid?access_token=%s"
+	userAuthSuccessAddr               = "/cgi-bin/user/authsucc?access_token=%s&userid=%s"
+	userBatchInviteAddr               = "/cgi-bin/batch/invite?access_token=%s"
+	userGetCorpJoinQRCodeAddr         = "/cgi-bin/corp/get_join_qrcode?access_token=%s&size_type=%d"
+	userGetActiveStatAddr             = "/cgi-bin/user/get_active_stat?access_token=%s"
+	userAsyncBatchSyncUpdateUserAddr  = "/cgi-bin/batch/syncuser?access_token=%s"
+	userAsyncBatchSyncReplaceUserAddr = "/cgi-bin/batch/replaceuser?access_token=%s"
+	getAsyncJobResultAddr             = "/cgi-bin/batch/getresult?access_token=%s&jobid=%s"
+	getAsyncExportJobResultAddr       = "/cgi-bin/export/get_result?access_token=%s&jobid=%s"
+	userAsyncExportSimpleUserAddr     = "/cgi-bin/export/simple_user?access_token=%s"
+	userAsyncExportUserAddr           = "/cgi-bin/export/user?access_token=%s"
+	userAsyncExportTagUsersAddr       = "/cgi-bin/export/taguser?access_token=%s"
 )
 
 type Member struct {
@@ -55,7 +55,7 @@ func (r *Member) Create(options ReqMemberCreate) (info util.CommonError, err err
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userCreateAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userCreateAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *Member) Read(userId string) (info RespMemberRead, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(userReadAddr, accessToken, userId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(userReadAddr, accessToken, userId))
 	if err != nil {
 		return
 	}
@@ -103,7 +103,7 @@ func (r *Member) Update(options ReqMemberUpdate) (info util.CommonError, err err
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userUpdateAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userUpdateAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -127,7 +127,7 @@ func (r *Member) Delete(userId string) (info RespMemberRead, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(userDeleteAddr, accessToken, userId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(userDeleteAddr, accessToken, userId))
 	if err != nil {
 		return
 	}
@@ -155,7 +155,7 @@ func (r *Member) DeleteBatchUserIds(options ReqMemberBatchDelete) (info util.Com
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userBatchDeleteAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userBatchDeleteAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -179,7 +179,7 @@ func (r *Member) GetMemberSimpleList(departmentId, fetchChild string) (info Resp
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(userSimpleListAddr, accessToken, departmentId, fetchChild))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(userSimpleListAddr, accessToken, departmentId, fetchChild))
 	if err != nil {
 		return
 	}
@@ -203,7 +203,7 @@ func (r *Member) GetMemberList(departmentId, fetchChild string) (info RespMember
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(userListAddr, accessToken, departmentId, fetchChild))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(userListAddr, accessToken, departmentId, fetchChild))
 	if err != nil {
 		return
 	}
@@ -227,7 +227,7 @@ func (r *Member) ConvertToOpenId(options ReqMemberConvertToOpenId) (info RespMem
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userConvertToOpenIdAdd, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userConvertToOpenIdAdd, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -251,7 +251,7 @@ func (r *Member) AuthSuccess(userId string) (info RespMemberDepartmentMemberDeta
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(userAuthSuccessAddr, accessToken, userId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(userAuthSuccessAddr, accessToken, userId))
 	if err != nil {
 		return
 	}
@@ -283,7 +283,7 @@ func (r *Member) BatchInvite(options ReqMemberBatchInvite) (info RespMemberBatch
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userBatchInviteAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userBatchInviteAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -307,7 +307,7 @@ func (r *Member) GetJoinQRCode(sizeType int) (info RespMemberGetJoinQRCode, err 
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(userGetCorpJoinQRCodeAddr, accessToken, sizeType))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(userGetCorpJoinQRCodeAddr, accessToken, sizeType))
 	if err != nil {
 		return
 	}
@@ -331,7 +331,7 @@ func (r *Member) GetActiveStat(options ReqMemberGetActiveStat) (info RespMemberG
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userGetActiveStatAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userGetActiveStatAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -355,7 +355,7 @@ func (r *Member) AsyncBatchSyncUpdateUser(options AsyncBatchSyncUserReq) (info A
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userAsyncBatchSyncUpdateUserAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userAsyncBatchSyncUpdateUserAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -379,7 +379,7 @@ func (r *Member) AsyncBatchSyncReplaceUser(options AsyncBatchSyncUserReq) (info 
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userAsyncBatchSyncReplaceUserAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userAsyncBatchSyncReplaceUserAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -403,7 +403,7 @@ func (r *Member) BatchGetAsyncJobResult(jobId string) (info BatchGetAsyncJobResu
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(getAsyncJobResultAddr, accessToken, jobId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(getAsyncJobResultAddr, accessToken, jobId))
 	if err != nil {
 		return
 	}
@@ -431,7 +431,7 @@ func (r *Member) AsyncExportSimpleUser(options ReqAsyncExportUser) (info AsyncJo
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userAsyncExportSimpleUserAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userAsyncExportSimpleUserAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -459,7 +459,7 @@ func (r *Member) AsyncExportUser(options ReqAsyncExportUser) (info AsyncJobResp,
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userAsyncExportUserAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userAsyncExportUserAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -487,7 +487,7 @@ func (r *Member) AsyncExportTagUsers(options ReqAsyncExportUser) (info AsyncJobR
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(userAsyncExportTagUsersAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userAsyncExportTagUsersAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -511,7 +511,7 @@ func (r *Member) GetAsyncExportJobResult(jobId string) (info GetAsyncExportJobRe
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(getAsyncExportJobResultAddr, accessToken, jobId))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(getAsyncExportJobResultAddr, accessToken, jobId))
 	if err != nil {
 		return
 	}

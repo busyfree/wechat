@@ -9,9 +9,9 @@ import (
 
 const (
 	// 获取会话状态
-	serviceStateGetAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/service_state/get?access_token=%s"
+	serviceStateGetAddr = "/cgi-bin/kf/service_state/get?access_token=%s"
 	// 变更会话状态
-	serviceStateTransAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/service_state/trans?access_token=%s"
+	serviceStateTransAddr = "/cgi-bin/kf/service_state/trans?access_token=%s"
 )
 
 // ServiceStateGetOptions 获取会话状态请求参数
@@ -43,7 +43,7 @@ func (r *Client) ServiceStateGet(options ServiceStateGetOptions) (info ServiceSt
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(serviceStateGetAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(serviceStateGetAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -80,7 +80,7 @@ func (r *Client) ServiceStateTrans(options ServiceStateTransOptions) (info Servi
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(serviceStateTransAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(serviceStateTransAddr, accessToken), options)
 	if err != nil {
 		return
 	}

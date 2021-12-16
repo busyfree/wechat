@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	//添加客服账号
+	// 添加客服账号
 	accountAddAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/account/add?access_token=%s"
 	// 删除客服账号
 	accountDelAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/account/del?access_token=%s"
@@ -16,7 +16,7 @@ const (
 	accountUpdateAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/account/update?access_token=%s"
 	// 获取客服账号列表
 	accountListAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/account/list?access_token=%s"
-	//获取客服账号链接
+	// 获取客服账号链接
 	addContactWayAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/add_contact_way?access_token=%s"
 )
 
@@ -42,7 +42,7 @@ func (r *Client) AccountAdd(options AccountAddOptions) (info AccountAddSchema, e
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(accountAddAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(accountAddAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -70,7 +70,7 @@ func (r *Client) AccountDel(options AccountDelOptions) (info util.CommonError, e
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(accountDelAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(accountDelAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -100,7 +100,7 @@ func (r *Client) AccountUpdate(options AccountUpdateOptions) (info util.CommonEr
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(accountUpdateAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(accountUpdateAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -136,7 +136,7 @@ func (r *Client) AccountList() (info AccountListSchema, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(accountListAddr, accessToken))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(accountListAddr, accessToken))
 	if err != nil {
 		return
 	}
@@ -175,7 +175,7 @@ func (r *Client) AddContactWay(options AddContactWayOptions) (info AddContactWay
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(addContactWayAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(addContactWayAddr, accessToken), options)
 	if err != nil {
 		return
 	}

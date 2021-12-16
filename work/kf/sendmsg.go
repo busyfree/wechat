@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	//发送消息
-	sendMsgAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/send_msg?access_token=%s"
+	// 发送消息
+	sendMsgAddr = "/cgi-bin/kf/send_msg?access_token=%s"
 )
 
 // SendMsgSchema 发送消息响应内容
@@ -35,7 +35,7 @@ func (r *Client) SendMsg(options interface{}) (info SendMsgSchema, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(sendMsgAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(sendMsgAddr, accessToken), options)
 	if err != nil {
 		return
 	}

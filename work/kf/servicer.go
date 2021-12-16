@@ -8,12 +8,12 @@ import (
 )
 
 const (
-	//添加接待人员
-	receptionistAddAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/servicer/add?access_token=%s"
-	//删除接待人员
-	receptionistDelAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/servicer/del?access_token=%s"
-	//获取接待人员列表
-	receptionistListAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/servicer/list?access_token=%s&open_kfid=%s"
+	// 添加接待人员
+	receptionistAddAddr = "/cgi-bin/kf/servicer/add?access_token=%s"
+	// 删除接待人员
+	receptionistDelAddr = "/cgi-bin/kf/servicer/del?access_token=%s"
+	// 获取接待人员列表
+	receptionistListAddr = "/cgi-bin/kf/servicer/list?access_token=%s&open_kfid=%s"
 )
 
 // ReceptionistOptions 添加接待人员请求参数
@@ -41,7 +41,7 @@ func (r *Client) ReceptionistAdd(options ReceptionistOptions) (info Receptionist
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(receptionistAddAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(receptionistAddAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *Client) ReceptionistDel(options ReceptionistOptions) (info Receptionist
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(receptionistDelAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(receptionistDelAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (r *Client) ReceptionistList(kfID string) (info ReceptionistListSchema, err
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(receptionistListAddr, accessToken, kfID))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(receptionistListAddr, accessToken, kfID))
 	if err != nil {
 		return
 	}

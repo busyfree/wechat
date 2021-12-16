@@ -10,11 +10,11 @@ import (
 )
 
 const (
-	linkedCorpAgentAddr          = "https://qyapi.weixin.qq.com/cgi-bin/linkedcorp/agent/get_perm_list?access_token=%s"
-	linkedCorpUserDetailAddr     = "https://qyapi.weixin.qq.com/cgi-bin/linkedcorp/user/get?access_token=%s"
-	linkedCorpUserSimpleListAddr = "https://qyapi.weixin.qq.com/cgi-bin/linkedcorp/user/simplelist?access_token=%s"
-	linkedCorpUserListAddr       = "https://qyapi.weixin.qq.com/cgi-bin/linkedcorp/user/list?access_token=%s"
-	linkedCorpDepartmentListAddr = "https://qyapi.weixin.qq.com/cgi-bin/linkedcorp/department/list?access_token=%s"
+	linkedCorpAgentAddr          = "/cgi-bin/linkedcorp/agent/get_perm_list?access_token=%s"
+	linkedCorpUserDetailAddr     = "/cgi-bin/linkedcorp/user/get?access_token=%s"
+	linkedCorpUserSimpleListAddr = "/cgi-bin/linkedcorp/user/simplelist?access_token=%s"
+	linkedCorpUserListAddr       = "/cgi-bin/linkedcorp/user/list?access_token=%s"
+	linkedCorpDepartmentListAddr = "/cgi-bin/linkedcorp/department/list?access_token=%s"
 )
 
 type LinkedCorp struct {
@@ -40,7 +40,7 @@ func (r *LinkedCorp) GetPermList() (info AgentGetPermListResp, err error) {
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(linkedCorpAgentAddr, accessToken), nil)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(linkedCorpAgentAddr, accessToken), nil)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *LinkedCorp) GetLinkedCorpUserDetail(options GetUserDetailReq) (info Get
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(linkedCorpUserDetailAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(linkedCorpUserDetailAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -88,7 +88,7 @@ func (r *LinkedCorp) GetLinkedCorpDepartmentUsers(options GetUserListReq) (info 
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(linkedCorpUserSimpleListAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(linkedCorpUserSimpleListAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -112,7 +112,7 @@ func (r *LinkedCorp) GetLinkedCorpDepartmentUserDetail(options GetUserListReq) (
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(linkedCorpUserListAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(linkedCorpUserListAddr, accessToken), options)
 	if err != nil {
 		return
 	}
@@ -136,7 +136,7 @@ func (r *LinkedCorp) GetDepartmentList(options GetDepartmentListReq) (info GetDe
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(linkedCorpDepartmentListAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(linkedCorpDepartmentListAddr, accessToken), options)
 	if err != nil {
 		return
 	}

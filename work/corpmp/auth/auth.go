@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	code2SessionURL = "https://qyapi.weixin.qq.com/cgi-bin/miniprogram/jscode2session?access_token=%s&js_code=%s&grant_type=authorization_code"
+	code2SessionURL = "/cgi-bin/miniprogram/jscode2session?access_token=%s&js_code=%s&grant_type=authorization_code"
 )
 
 // Auth 登录/用户信息
@@ -48,7 +48,7 @@ func (auth *Auth) Code2SessionContext(ctx context2.Context, jsCode string) (resu
 	if err != nil {
 		return
 	}
-	if response, err = util.HTTPGetContext(ctx, fmt.Sprintf(code2SessionURL, accessToken, jsCode)); err != nil {
+	if response, err = util.HTTPGetContext(ctx, auth.GetQYAPIDomain()+fmt.Sprintf(code2SessionURL, accessToken, jsCode)); err != nil {
 		return
 	}
 	if err = json.Unmarshal(response, &result); err != nil {

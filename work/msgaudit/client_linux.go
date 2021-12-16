@@ -14,7 +14,7 @@ import (
 	"unsafe"
 
 	"github.com/silenceper/wechat/v2/util"
-	"github.com/silenceper/wechat/v2/work/config"
+	"github.com/silenceper/wechat/v2/work/context"
 )
 
 // Client 会话存档
@@ -38,10 +38,10 @@ type Client struct {
 *      0   - 成功
 *      !=0 - 失败
  */
-func NewClient(cfg *config.Config) (*Client, error) {
+func NewClient(ctx *context.Context) (*Client, error) {
 	ptr := C.NewSdk()
-	corpIDC := C.CString(cfg.CorpID)
-	corpSecretC := C.CString(cfg.CorpSecret)
+	corpIDC := C.CString(ctx.CorpID)
+	corpSecretC := C.CString(ctx.CorpSecret)
 	defer func() {
 		C.free(unsafe.Pointer(corpIDC))
 		C.free(unsafe.Pointer(corpSecretC))

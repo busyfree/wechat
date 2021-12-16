@@ -12,6 +12,12 @@ import (
 	"github.com/silenceper/wechat/v2/work/oauth"
 )
 
+const (
+	workDefaultApiDomain     = "https://qyapi.weixin.qq.com"
+	openWorkDefaultApiDomain = "https://open.work.weixin.qq.com"
+	openDefaultApiDomain     = "https://open.weixin.qq.com"
+)
+
 // Work 企业微信
 type Work struct {
 	ctx *context.Context
@@ -19,6 +25,18 @@ type Work struct {
 
 // NewWork init work
 func NewWork(cfg *config.Config) *Work {
+	if cfg.Cache == nil {
+		panic("cache 未设置")
+	}
+	if len(cfg.QYAPIDomain) == 0 {
+		cfg.QYAPIDomain = workDefaultApiDomain
+	}
+	if len(cfg.OpenQYAPIDomain) == 0 {
+		cfg.OpenQYAPIDomain = openWorkDefaultApiDomain
+	}
+	if len(cfg.OpenAPIDomain) == 0 {
+		cfg.OpenAPIDomain = openDefaultApiDomain
+	}
 	defaultAkHandle := credential.NewWorkAccessToken(cfg.CorpID, cfg.CorpSecret, credential.CacheKeyWorkPrefix, cfg.Cache)
 	ctx := &context.Context{
 		Config:            cfg,
@@ -39,12 +57,12 @@ func (wk *Work) GetOauth() *oauth.Oauth {
 
 // GetMsgAudit get msgAudit
 func (wk *Work) GetMsgAudit() (*msgaudit.Client, error) {
-	return msgaudit.NewClient(wk.ctx.Config)
+	return msgaudit.NewClient(wk.ctx)
 }
 
 // GetKF get kf
-func (wk *Work) GetKF() (*kf.Client, error) {
-	return kf.NewClient(wk.ctx.Config)
+func (wk *Work) GetKF() *kf.Client {
+	return kf.NewClient(wk.ctx)
 }
 
 // GetContact get contact

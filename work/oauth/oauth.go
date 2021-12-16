@@ -16,11 +16,11 @@ type Oauth struct {
 
 var (
 	// oauthTargetURL 企业微信内跳转地址
-	oauthTargetURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+	oauthTargetURL = "/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
 	// oauthUserInfoURL 获取用户信息地址
-	oauthUserInfoURL = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=%s&code=%s"
+	oauthUserInfoURL = "/cgi-bin/user/getuserinfo?access_token=%s&code=%s"
 	// oauthQrContentTargetURL 构造独立窗口登录二维码
-	oauthQrContentTargetURL = "https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=%s&agentid=%s&redirect_uri=%s&state=%s"
+	oauthQrContentTargetURL = "/wwopen/sso/qrConnect?appid=%s&agentid=%s&redirect_uri=%s&state=%s"
 )
 
 // NewOauth new init oauth
@@ -34,7 +34,7 @@ func NewOauth(ctx *context.Context) *Oauth {
 func (ctr *Oauth) GetTargetURL(callbackURL string) string {
 	// url encode
 	urlStr := url.QueryEscape(callbackURL)
-	return fmt.Sprintf(
+	return ctr.GetOpenAPIDomain() + fmt.Sprintf(
 		oauthTargetURL,
 		ctr.CorpID,
 		urlStr,
@@ -45,7 +45,7 @@ func (ctr *Oauth) GetTargetURL(callbackURL string) string {
 func (ctr *Oauth) GetQrContentTargetURL(callbackURL string) string {
 	// url encode
 	urlStr := url.QueryEscape(callbackURL)
-	return fmt.Sprintf(
+	return ctr.GetOpenQYAPIDomain() + fmt.Sprintf(
 		oauthQrContentTargetURL,
 		ctr.CorpID,
 		ctr.AgentID,
@@ -73,7 +73,7 @@ func (ctr *Oauth) UserFromCode(code string) (result ResUserInfo, err error) {
 	}
 	var response []byte
 	response, err = util.HTTPGet(
-		fmt.Sprintf(oauthUserInfoURL, accessToken, code),
+		ctr.GetQYAPIDomain() + fmt.Sprintf(oauthUserInfoURL, accessToken, code),
 	)
 	if err != nil {
 		return

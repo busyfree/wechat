@@ -34,7 +34,7 @@ func (r *Client) VerifyURL(options SignatureOptions) (string, error) {
 	if options.Signature != util.Signature(r.ctx.Token, options.TimeStamp, options.Nonce, options.EchoStr) {
 		return "", NewSDKErr(40015)
 	}
-	_, bData, err := util.DecryptMsg(r.corpID, options.EchoStr, r.encodingAESKey)
+	_, bData, err := util.DecryptMsg(r.ctx.CorpID, options.EchoStr, r.ctx.EncodingAESKey)
 	if err != nil {
 		return "", NewSDKErr(40016)
 	}
@@ -85,7 +85,7 @@ func (r *Client) GetCallbackMessage(encryptedMsg []byte) (msg CallbackMessage, e
 	if err = xml.Unmarshal(encryptedMsg, &origin); err != nil {
 		return msg, err
 	}
-	_, bData, err := util.DecryptMsg(r.corpID, origin.Encrypt, r.encodingAESKey)
+	_, bData, err := util.DecryptMsg(r.ctx.CorpID, origin.Encrypt, r.ctx.EncodingAESKey)
 	if err != nil {
 		return msg, NewSDKErr(40016)
 	}

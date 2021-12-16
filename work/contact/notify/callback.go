@@ -22,7 +22,7 @@ func (r *Notify) VerifyURL(options SignatureOptions) (string, error) {
 	if options.Signature != util.Signature(r.ctx.Token, options.TimeStamp, options.Nonce, options.EchoStr) {
 		return "", xerror.NewSDKErr(40015)
 	}
-	_, bData, err := util.DecryptMsg(r.ctx.Config.CorpID, options.EchoStr, r.ctx.Config.EncodingAESKey)
+	_, bData, err := util.DecryptMsg(r.ctx.CorpID, options.EchoStr, r.ctx.EncodingAESKey)
 	if err != nil {
 		return "", xerror.NewSDKErr(40016)
 	}
@@ -49,7 +49,7 @@ func (r *Notify) GetCallbackMsg(encryptedRawMsg []byte) (plainTxtByte []byte, ms
 	if err = xml.Unmarshal(encryptedRawMsg, &origin); err != nil {
 		return
 	}
-	_, plainTxtByte, err = util.DecryptMsg(r.ctx.Config.CorpID, origin.Encrypt, r.ctx.Config.EncodingAESKey)
+	_, plainTxtByte, err = util.DecryptMsg(r.ctx.CorpID, origin.Encrypt, r.ctx.EncodingAESKey)
 	if err != nil {
 		err = xerror.NewSDKErr(40016)
 		return

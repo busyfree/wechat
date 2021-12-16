@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	//获取消息
-	syncMsgAddr = "https://qyapi.weixin.qq.com/cgi-bin/kf/sync_msg?access_token=%s"
+	// 获取消息
+	syncMsgAddr = "/cgi-bin/kf/sync_msg?access_token=%s"
 )
 
 // SyncMsgOptions 获取消息查询参数
@@ -49,7 +49,7 @@ func (r *Client) SyncMsg(options SyncMsgOptions) (info SyncMsgSchema, err error)
 	if err != nil {
 		return
 	}
-	data, err = util.PostJSON(fmt.Sprintf(syncMsgAddr, accessToken), options)
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(syncMsgAddr, accessToken), options)
 	if err != nil {
 		return
 	}

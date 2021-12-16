@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	//获取视频号绑定状态
-	corpQualification = "https://qyapi.weixin.qq.com/cgi-bin/kf/get_corp_qualification?access_token=%s"
+	// 获取视频号绑定状态
+	corpQualification = "/cgi-bin/kf/get_corp_qualification?access_token=%s"
 )
 
 // CorpQualificationSchema 获取视频号绑定状态响应内容
@@ -35,7 +35,7 @@ func (r *Client) GetCorpQualification() (info CorpQualificationSchema, err error
 	if err != nil {
 		return
 	}
-	data, err = util.HTTPGet(fmt.Sprintf(corpQualification, accessToken))
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(corpQualification, accessToken))
 	if err != nil {
 		return info, err
 	}
