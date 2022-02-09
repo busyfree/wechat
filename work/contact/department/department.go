@@ -14,6 +14,7 @@ const (
 	departmentCreateAddr                = "/cgi-bin/department/create?access_token=%s"
 	departmentUpdateAddr                = "/cgi-bin/department/update?access_token=%s"
 	departmentDeleteAddr                = "/cgi-bin/department/delete?access_token=%s&id=%d"
+	departmentGetAddr                   = "/cgi-bin/department/get?access_token=%s&id=%d"
 	departmentListAddr                  = "/cgi-bin/department/list?access_token=%s&id=%d"
 	departmentAsyncReplacePartyListAddr = "/cgi-bin/batch/replaceparty?access_token=%s"
 	getAsyncJobResultAddr               = "/cgi-bin/batch/getresult?access_token=%s&jobid=%s"
@@ -117,6 +118,30 @@ func (r *Department) List(id int) (info RespDepartmentList, err error) {
 		return
 	}
 	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(departmentListAddr, accessToken, id))
+	if err != nil {
+		return
+	}
+	if err = json.Unmarshal(data, &info); err != nil {
+		return
+	}
+	if info.ErrCode != 0 {
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
+	}
+	return info, nil
+}
+
+// Get 获取单个部门详情
+// https://developer.work.weixin.qq.com/document/path/95351
+func (r *Department) Get(id int) (info RespDepartmentGet, err error) {
+	var (
+		accessToken string
+		data        []byte
+	)
+	accessToken, err = r.ctx.GetAccessToken()
+	if err != nil {
+		return
+	}
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(departmentGetAddr, accessToken, id))
 	if err != nil {
 		return
 	}

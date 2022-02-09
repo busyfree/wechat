@@ -34,6 +34,11 @@ type RespDepartmentList struct {
 	} `json:"department"`
 }
 
+type RespDepartmentGet struct {
+	util.CommonError
+	Department CommonField `json:"department"`
+}
+
 type BatchAsyncReplacePartyReq struct {
 	MediaId  string `json:"media_id"`
 	Callback struct {
