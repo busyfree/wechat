@@ -11,7 +11,10 @@ import (
 )
 
 // getTicketURL 获取ticket的url
-const getTicketURL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+const (
+	getTicketURL     = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+	workGetTicketURL = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=%s"
+)
 
 // DefaultJsTicket 默认获取js ticket方法
 type DefaultJsTicket struct {
@@ -41,9 +44,12 @@ type ResTicket struct {
 }
 
 // GetTicket 获取jsapi_ticket
-func (js *DefaultJsTicket) GetTicket(accessToken string) (ticketStr string, err error) {
+func (js *DefaultJsTicket) GetTicket(accessToken string, optional ...interface{}) (ticketStr string, err error) {
 	// 先从cache中取
 	jsAPITicketCacheKey := fmt.Sprintf("%s_jsapi_ticket_%s", js.cacheKeyPrefix, js.appID)
+	if len(optional) > 0 && optional[0].(string) == "work" {
+		jsAPITicketCacheKey = fmt.Sprintf("%s_qy_jsapi_ticket_%s", js.cacheKeyPrefix, js.appID)
+	}
 	if val := js.cache.Get(jsAPITicketCacheKey); val != nil {
 		return val.(string), nil
 	}
@@ -55,9 +61,12 @@ func (js *DefaultJsTicket) GetTicket(accessToken string) (ticketStr string, err 
 	if val := js.cache.Get(jsAPITicketCacheKey); val != nil {
 		return val.(string), nil
 	}
-
 	var ticket ResTicket
-	ticket, err = GetTicketFromServer(accessToken)
+	if len(optional) > 0 && optional[0].(string) == "work" {
+		ticket, err = GetTicketFromServer(accessToken, "work")
+	} else {
+		ticket, err = GetTicketFromServer(accessToken)
+	}
 	if err != nil {
 		return
 	}
@@ -68,9 +77,12 @@ func (js *DefaultJsTicket) GetTicket(accessToken string) (ticketStr string, err 
 }
 
 // GetTicketFromServer 从服务器中获取ticket
-func GetTicketFromServer(accessToken string) (ticket ResTicket, err error) {
+func GetTicketFromServer(accessToken string, optional ...interface{}) (ticket ResTicket, err error) {
 	var response []byte
 	url := fmt.Sprintf(getTicketURL, accessToken)
+	if len(optional) > 0 && optional[0].(string) == "work" {
+		url = fmt.Sprintf(workGetTicketURL, accessToken)
+	}
 	response, err = util.HTTPGet(url)
 	if err != nil {
 		return
