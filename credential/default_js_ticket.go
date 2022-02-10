@@ -12,8 +12,9 @@ import (
 
 // getTicketURL 获取ticket的url
 const (
-	getTicketURL     = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
-	workGetTicketURL = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=%s"
+	getTicketURL          = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+	workGetTicketURL      = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=%s"
+	workAgentGetTicketURL = "https://qyapi.weixin.qq.com/cgi-bin/ticket/get?access_token=%s&type=agent_config"
 )
 
 // DefaultJsTicket 默认获取js ticket方法
@@ -47,8 +48,13 @@ type ResTicket struct {
 func (js *DefaultJsTicket) GetTicket(accessToken string, optional ...interface{}) (ticketStr string, err error) {
 	// 先从cache中取
 	jsAPITicketCacheKey := fmt.Sprintf("%s_jsapi_ticket_%s", js.cacheKeyPrefix, js.appID)
-	if len(optional) > 0 && optional[0].(string) == "work" {
-		jsAPITicketCacheKey = fmt.Sprintf("%s_qy_jsapi_ticket_%s", js.cacheKeyPrefix, js.appID)
+	if len(optional) > 0 {
+		switch optional[0].(string) {
+		case "work":
+			jsAPITicketCacheKey = fmt.Sprintf("%s_qy_jsapi_ticket_%s", js.cacheKeyPrefix, js.appID)
+		case "agent":
+			jsAPITicketCacheKey = fmt.Sprintf("%s_qy_agent_jsapi_ticket_%s", js.cacheKeyPrefix, js.appID)
+		}
 	}
 	if val := js.cache.Get(jsAPITicketCacheKey); val != nil {
 		return val.(string), nil
@@ -62,11 +68,7 @@ func (js *DefaultJsTicket) GetTicket(accessToken string, optional ...interface{}
 		return val.(string), nil
 	}
 	var ticket ResTicket
-	if len(optional) > 0 && optional[0].(string) == "work" {
-		ticket, err = GetTicketFromServer(accessToken, "work")
-	} else {
-		ticket, err = GetTicketFromServer(accessToken)
-	}
+	ticket, err = GetTicketFromServer(accessToken, optional...)
 	if err != nil {
 		return
 	}
@@ -80,8 +82,13 @@ func (js *DefaultJsTicket) GetTicket(accessToken string, optional ...interface{}
 func GetTicketFromServer(accessToken string, optional ...interface{}) (ticket ResTicket, err error) {
 	var response []byte
 	url := fmt.Sprintf(getTicketURL, accessToken)
-	if len(optional) > 0 && optional[0].(string) == "work" {
-		url = fmt.Sprintf(workGetTicketURL, accessToken)
+	if len(optional) > 0 {
+		switch optional[0].(string) {
+		case "work":
+			url = fmt.Sprintf(workGetTicketURL, accessToken)
+		case "agent":
+			url = fmt.Sprintf(workAgentGetTicketURL, accessToken)
+		}
 	}
 	response, err = util.HTTPGet(url)
 	if err != nil {

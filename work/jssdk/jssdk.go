@@ -16,7 +16,8 @@ type JsSDK struct {
 
 // Config 返回给用户jssdk配置信息
 type Config struct {
-	AppID     string `json:"app_id"`
+	CorpID    string `json:"corpid"`
+	AgentID   string `json:"agentid,omitempty"`
 	Timestamp int64  `json:"timestamp"`
 	NonceStr  string `json:"nonce_str"`
 	Signature string `json:"signature"`
@@ -36,9 +37,9 @@ func (js *JsSDK) SetJsTicketHandle(ticketHandle credential.JsTicketHandle) {
 	js.JsTicketHandle = ticketHandle
 }
 
-// GetConfig 获取jssdk需要的配置参数
+// GetCorpConfig 获取jssdk需要的配置参数
 // uri 为当前网页地址
-func (js *JsSDK) GetConfig(uri string) (config *Config, err error) {
+func (js *JsSDK) GetCorpConfig(uri string) (config *Config, err error) {
 	config = new(Config)
 	var accessToken string
 	accessToken, err = js.GetAccessToken()
@@ -56,7 +57,35 @@ func (js *JsSDK) GetConfig(uri string) (config *Config, err error) {
 	str := fmt.Sprintf("jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s", ticketStr, nonceStr, timestamp, uri)
 	sigStr := util.Signature(str)
 
-	config.AppID = js.CorpID
+	config.CorpID = js.CorpID
+	config.NonceStr = nonceStr
+	config.Timestamp = timestamp
+	config.Signature = sigStr
+	return
+}
+
+// GetCorpAgentConfig 获取jssdk需要的配置参数
+// uri 为当前网页地址
+func (js *JsSDK) GetCorpAgentConfig(uri string) (config *Config, err error) {
+	config = new(Config)
+	var accessToken string
+	accessToken, err = js.GetAccessToken()
+	if err != nil {
+		return
+	}
+	var ticketStr string
+	ticketStr, err = js.GetTicket(accessToken, "agent")
+	if err != nil {
+		return
+	}
+
+	nonceStr := util.RandomStr(16)
+	timestamp := util.GetCurrTS()
+	str := fmt.Sprintf("jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s", ticketStr, nonceStr, timestamp, uri)
+	sigStr := util.Signature(str)
+
+	config.CorpID = js.CorpID
+	config.AgentID = js.AgentID
 	config.NonceStr = nonceStr
 	config.Timestamp = timestamp
 	config.Signature = sigStr
