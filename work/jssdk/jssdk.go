@@ -27,7 +27,16 @@ type Config struct {
 func NewJsSDK(context *context.Context) *JsSDK {
 	js := new(JsSDK)
 	js.Context = context
-	jsTicketHandle := credential.NewDefaultJsTicket(context.CorpID, credential.CacheKeyWorkPrefix, context.Cache)
+	jsTicketHandle := credential.NewWorkJsTicket(context.CorpID, "", credential.CacheKeyWorkPrefix, context.Cache)
+	js.SetJsTicketHandle(jsTicketHandle)
+	return js
+}
+
+// NewAgentJsSDK init
+func NewAgentJsSDK(context *context.Context) *JsSDK {
+	js := new(JsSDK)
+	js.Context = context
+	jsTicketHandle := credential.NewWorkJsTicket(context.CorpID, context.AgentID, credential.CacheKeyWorkPrefix, context.Cache)
 	js.SetJsTicketHandle(jsTicketHandle)
 	return js
 }
@@ -37,9 +46,9 @@ func (js *JsSDK) SetJsTicketHandle(ticketHandle credential.JsTicketHandle) {
 	js.JsTicketHandle = ticketHandle
 }
 
-// GetCorpConfig 获取jssdk需要的配置参数
+// GetConfig 获取jssdk需要的配置参数
 // uri 为当前网页地址
-func (js *JsSDK) GetCorpConfig(uri string) (config *Config, err error) {
+func (js *JsSDK) GetConfig(uri string) (config *Config, err error) {
 	config = new(Config)
 	var accessToken string
 	accessToken, err = js.GetAccessToken()
@@ -47,11 +56,10 @@ func (js *JsSDK) GetCorpConfig(uri string) (config *Config, err error) {
 		return
 	}
 	var ticketStr string
-	ticketStr, err = js.GetTicket(accessToken, "work")
+	ticketStr, err = js.GetTicket(accessToken)
 	if err != nil {
 		return
 	}
-
 	nonceStr := util.RandomStr(16)
 	timestamp := util.GetCurrTS()
 	str := fmt.Sprintf("jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s", ticketStr, nonceStr, timestamp, uri)
@@ -64,9 +72,9 @@ func (js *JsSDK) GetCorpConfig(uri string) (config *Config, err error) {
 	return
 }
 
-// GetCorpAgentConfig 获取jssdk需要的配置参数
+// GetAgentConfig 获取jssdk需要的配置参数
 // uri 为当前网页地址
-func (js *JsSDK) GetCorpAgentConfig(uri string) (config *Config, err error) {
+func (js *JsSDK) GetAgentConfig(uri string) (config *Config, err error) {
 	config = new(Config)
 	var accessToken string
 	accessToken, err = js.GetAccessToken()
@@ -74,11 +82,10 @@ func (js *JsSDK) GetCorpAgentConfig(uri string) (config *Config, err error) {
 		return
 	}
 	var ticketStr string
-	ticketStr, err = js.GetTicket(accessToken, "agent")
+	ticketStr, err = js.GetTicket(accessToken)
 	if err != nil {
 		return
 	}
-
 	nonceStr := util.RandomStr(16)
 	timestamp := util.GetCurrTS()
 	str := fmt.Sprintf("jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s", ticketStr, nonceStr, timestamp, uri)
