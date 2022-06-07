@@ -15,6 +15,8 @@ const (
 	accessTokenURL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
 	// AccessTokenURL 企业微信获取access_token的接口
 	workAccessTokenURL = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s"
+	// 获取应用可见范围内下级/下游企业的access_token，该access_token可用于调用下级/下游企业通讯录的只读接口。
+	workCorpChainAccessTokenURL = "https://qyapi.weixin.qq.com/cgi-bin/corpgroup/corp/gettoken?access_token=%s"
 	// CacheKeyOfficialAccountPrefix 微信公众号cache key前缀
 	CacheKeyOfficialAccountPrefix = "gowechat_officialaccount_"
 	// CacheKeyMiniProgramPrefix 小程序cache key前缀
@@ -136,6 +138,103 @@ func (ak *WorkAccessToken) GetAccessToken() (accessToken string, err error) {
 		return
 	}
 	accessToken = resAccessToken.AccessToken
+	return
+}
+
+// WorkCorpChainAccessToken 企业微信AccessToken 获取
+type WorkCorpChainAccessToken struct {
+	CorpID                string
+	AgentID               int
+	BusinessType          int
+	cacheKeyPrefix        string
+	cache                 cache.Cache
+	accessTokenLock       *sync.Mutex
+	parentCorpAccessToken *WorkAccessToken
+}
+
+// NewWorkCorpChainAccessToken new WorkCorpChainAccessToken
+func NewWorkCorpChainAccessToken(parentCorpAccessTokenHandle AccessTokenHandle, agentId int, cacheKeyPrefix string, bizType int, cache cache.Cache) AccessTokenHandle {
+	if cache == nil {
+		panic("cache the not exist")
+	}
+	parentWorkAccessToken, ok := parentCorpAccessTokenHandle.(*WorkAccessToken)
+	if !ok {
+		panic("missing parentCorpAccessTokenHandle")
+	}
+	return &WorkCorpChainAccessToken{
+		parentCorpAccessToken: parentWorkAccessToken,
+		CorpID:                parentWorkAccessToken.CorpID,
+		AgentID:               agentId,
+		BusinessType:          bizType,
+		cache:                 cache,
+		cacheKeyPrefix:        cacheKeyPrefix,
+		accessTokenLock:       new(sync.Mutex),
+	}
+}
+
+// GetAccessToken 获取下级/下游企业的access_token,先从cache中获取，没有则从服务端获取
+func (ak *WorkCorpChainAccessToken) GetAccessToken() (accessToken string, err error) {
+	// 加上lock，是为了防止在并发获取token时，cache刚好失效，导致从微信服务器上获取到不同token
+	ak.accessTokenLock.Lock()
+	defer ak.accessTokenLock.Unlock()
+	accessTokenCacheKey := fmt.Sprintf("%s_chain_access_token_%s_%d", ak.cacheKeyPrefix, ak.CorpID, ak.AgentID)
+	val := ak.cache.Get(accessTokenCacheKey)
+	if val != nil {
+		accessToken = val.(string)
+		return
+	}
+	// cache失效，从微信服务器获取
+	var resAccessToken ResAccessToken
+	resAccessToken, err = ak.getWorkCorpChainTokenFromServer()
+	if err != nil {
+		return
+	}
+	expires := resAccessToken.ExpiresIn - 1500
+	err = ak.cache.Set(accessTokenCacheKey, resAccessToken.AccessToken, time.Duration(expires)*time.Second)
+	if err != nil {
+		return
+	}
+	accessToken = resAccessToken.AccessToken
+	return
+}
+
+func (ak *WorkCorpChainAccessToken) GetParentAccessToken() (accessToken string, err error) {
+	accessToken, err = ak.parentCorpAccessToken.GetAccessToken()
+	if err != nil {
+		return
+	}
+	return
+}
+
+type ReqWorkCorpChainToken struct {
+	CorpId  string `json:"corpid"`
+	BizType int    `json:"business_type"`
+	AgentId int    `json:"agentid"`
+}
+
+func (ak *WorkCorpChainAccessToken) getWorkCorpChainTokenFromServer() (resAccessToken ResAccessToken, err error) {
+	var body []byte
+	req := &ReqWorkCorpChainToken{
+		CorpId:  ak.CorpID,
+		BizType: ak.BusinessType,
+		AgentId: ak.AgentID,
+	}
+	parentAccessToken, err := ak.parentCorpAccessToken.GetAccessToken()
+	if err != nil {
+		return
+	}
+	body, err = util.PostJSON(fmt.Sprintf(workCorpChainAccessTokenURL, parentAccessToken), req)
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(body, &resAccessToken)
+	if err != nil {
+		return
+	}
+	if resAccessToken.ErrCode != 0 {
+		err = fmt.Errorf("get access_token error : errcode=%v , errormsg=%v", resAccessToken.ErrCode, resAccessToken.ErrMsg)
+		return
+	}
 	return
 }
 

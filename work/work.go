@@ -6,6 +6,7 @@ import (
 	"github.com/silenceper/wechat/v2/work/config"
 	"github.com/silenceper/wechat/v2/work/contact"
 	"github.com/silenceper/wechat/v2/work/context"
+	"github.com/silenceper/wechat/v2/work/corpchain"
 	"github.com/silenceper/wechat/v2/work/corpmp"
 	"github.com/silenceper/wechat/v2/work/kf"
 	"github.com/silenceper/wechat/v2/work/msgaudit"
@@ -70,6 +71,16 @@ func (wk *Work) GetContact() *contact.Contact {
 	return contact.NewContact(wk.ctx)
 }
 
+// GetCorpChainContact get contact
+func (wk *Work) GetCorpChainContact(agentId, bizType int) *contact.Contact {
+	defaultWorkCorpChainAkHandle := credential.NewWorkCorpChainAccessToken(wk.ctx.AccessTokenHandle, agentId, credential.CacheKeyWorkPrefix, bizType, wk.ctx.Config.Cache)
+	ctx := &context.Context{
+		Config:            wk.ctx.Config,
+		AccessTokenHandle: defaultWorkCorpChainAkHandle,
+	}
+	return contact.NewContact(ctx)
+}
+
 // GetAgent get agent
 func (wk *Work) GetAgent() *agent.Agent {
 	return agent.NewAgent(wk.ctx)
@@ -78,4 +89,14 @@ func (wk *Work) GetAgent() *agent.Agent {
 // GetCorpMP get corp mp
 func (wk *Work) GetCorpMP() *corpmp.CorpMP {
 	return corpmp.NewCorpMP(wk.ctx)
+}
+
+// GetCorpChain get corp chain
+func (wk *Work) GetCorpChain(agentId, bizType int) *corpchain.CorpChain {
+	defaultWorkCorpChainAkHandle := credential.NewWorkCorpChainAccessToken(wk.ctx.AccessTokenHandle, agentId, credential.CacheKeyWorkPrefix, bizType, wk.ctx.Config.Cache)
+	ctx := &context.Context{
+		Config:            wk.ctx.Config,
+		AccessTokenHandle: defaultWorkCorpChainAkHandle,
+	}
+	return corpchain.NewCorpChain(ctx)
 }
