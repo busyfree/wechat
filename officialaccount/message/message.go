@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 
 	"github.com/silenceper/wechat/v2/officialaccount/device"
+	"github.com/silenceper/wechat/v2/officialaccount/freepublish"
 )
 
 // MsgType 基本消息类型
@@ -75,6 +76,8 @@ const (
 	EventWxaMediaCheck EventType = "wxa_media_check"
 	// EventSubscribeMsgPopupEvent 订阅通知事件推送
 	EventSubscribeMsgPopupEvent EventType = "subscribe_msg_popup_event"
+	// EventPublishJobFinish 发布任务完成
+	EventPublishJobFinish EventType = "PUBLISHJOBFINISH"
 )
 
 const (
@@ -114,7 +117,7 @@ type MixMessage struct {
 	URL           string  `xml:"Url"`
 
 	// 事件相关
-	Event       EventType `xml:"Event"`
+	Event       EventType `xml:"Event" json:"Event"`
 	EventKey    string    `xml:"EventKey"`
 	Ticket      string    `xml:"Ticket"`
 	Latitude    string    `xml:"Latitude"`
@@ -146,9 +149,26 @@ type MixMessage struct {
 		Poiname   string  `xml:"Poiname"`
 	}
 
+	subscribeMsgPopupEventList []SubscribeMsgPopupEvent `json:"-"`
+
 	SubscribeMsgPopupEvent []struct {
 		List SubscribeMsgPopupEvent `xml:"List"`
 	} `xml:"SubscribeMsgPopupEvent"`
+
+	// 事件相关：发布能力
+	PublishEventInfo struct {
+		PublishID     int64                     `xml:"publish_id"`     // 发布任务id
+		PublishStatus freepublish.PublishStatus `xml:"publish_status"` // 发布状态
+		ArticleID     string                    `xml:"article_id"`     // 当发布状态为0时（即成功）时，返回图文的 article_id，可用于“客服消息”场景
+		ArticleDetail struct {
+			Count uint `xml:"count"` // 文章数量
+			Item  []struct {
+				Index      uint   `xml:"idx"`         // 文章对应的编号
+				ArticleURL string `xml:"article_url"` // 图文的永久链接
+			} `xml:"item"`
+		} `xml:"article_detail"` // 当发布状态为0时（即成功）时，返回内容
+		FailIndex []uint `xml:"fail_idx"` // 当发布状态为2或4时，返回不通过的文章编号，第一篇为 1；其他发布状态则为空
+	} `xml:"PublishEventInfo"`
 
 	// 第三方平台相关
 	InfoType                     InfoType `xml:"InfoType"`
@@ -191,9 +211,26 @@ type MixMessage struct {
 
 // SubscribeMsgPopupEvent 订阅通知事件推送的消息体
 type SubscribeMsgPopupEvent struct {
-	TemplateID            string `xml:"TemplateId"`
-	SubscribeStatusString string `xml:"SubscribeStatusString"`
-	PopupScene            int    `xml:"PopupScene"`
+	TemplateID            string `xml:"TemplateId" json:"TemplateId"`
+	SubscribeStatusString string `xml:"SubscribeStatusString" json:"SubscribeStatusString"`
+	PopupScene            int    `xml:"PopupScene" json:"PopupScene,string"`
+}
+
+// SetSubscribeMsgPopupEvents 设置订阅消息事件
+func (s *MixMessage) SetSubscribeMsgPopupEvents(list []SubscribeMsgPopupEvent) {
+	s.subscribeMsgPopupEventList = list
+}
+
+// GetSubscribeMsgPopupEvents 获取订阅消息事件数据
+func (s *MixMessage) GetSubscribeMsgPopupEvents() []SubscribeMsgPopupEvent {
+	if s.subscribeMsgPopupEventList != nil {
+		return s.subscribeMsgPopupEventList
+	}
+	list := make([]SubscribeMsgPopupEvent, len(s.SubscribeMsgPopupEvent))
+	for i, item := range s.SubscribeMsgPopupEvent {
+		list[i] = item.List
+	}
+	return list
 }
 
 // EventPic 发图事件推送
@@ -230,10 +267,10 @@ func (c CDATA) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 // CommonToken 消息中通用的结构
 type CommonToken struct {
 	XMLName      xml.Name `xml:"xml"`
-	ToUserName   CDATA    `xml:"ToUserName"`
-	FromUserName CDATA    `xml:"FromUserName"`
-	CreateTime   int64    `xml:"CreateTime"`
-	MsgType      MsgType  `xml:"MsgType"`
+	ToUserName   CDATA    `xml:"ToUserName" json:"ToUserName"`
+	FromUserName CDATA    `xml:"FromUserName" json:"FromUserName"`
+	CreateTime   int64    `xml:"CreateTime" json:"CreateTime"`
+	MsgType      MsgType  `xml:"MsgType" json:"MsgType"`
 }
 
 // SetToUserName set ToUserName

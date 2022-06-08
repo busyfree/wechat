@@ -8,7 +8,6 @@ import (
 )
 
 const (
-	// 发送消息
 	sendMsgAddr = "/cgi-bin/kf/send_msg?access_token=%s"
 )
 

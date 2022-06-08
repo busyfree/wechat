@@ -8,6 +8,7 @@ import (
 	"github.com/silenceper/wechat/v2/work/context"
 	"github.com/silenceper/wechat/v2/work/corpchain"
 	"github.com/silenceper/wechat/v2/work/corpmp"
+	"github.com/silenceper/wechat/v2/work/externalcontact"
 	"github.com/silenceper/wechat/v2/work/kf"
 	"github.com/silenceper/wechat/v2/work/msgaudit"
 	"github.com/silenceper/wechat/v2/work/oauth"
@@ -99,4 +100,9 @@ func (wk *Work) GetCorpChain(agentId, bizType int) *corpchain.CorpChain {
 		AccessTokenHandle: defaultWorkCorpChainAkHandle,
 	}
 	return corpchain.NewCorpChain(ctx)
+}
+
+// GetExternalContact get external_contact
+func (wk *Work) GetExternalContact() *externalcontact.Client {
+	return externalcontact.NewClient(wk.ctx)
 }
