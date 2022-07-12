@@ -98,7 +98,9 @@ func (r *CorpChain) UnionidToExternalUserId(unionId, openId, corpId string) (res
 	req := &ReqUnionidToExternalUserId{
 		Unionid: unionId,
 		Openid:  openId,
-		CorpId:  corpId,
+	}
+	if len(corpId) > 0 {
+		req.CorpId = corpId
 	}
 	body, err = util.PostJSON(r.ctx.QYAPIDomain+fmt.Sprintf(unionidToExternalUseridURL, token), req)
 	if err != nil {

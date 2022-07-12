@@ -153,7 +153,7 @@ type WorkCorpChainAccessToken struct {
 }
 
 // NewWorkCorpChainAccessToken new WorkCorpChainAccessToken
-func NewWorkCorpChainAccessToken(parentCorpAccessTokenHandle AccessTokenHandle, agentId int, cacheKeyPrefix string, bizType int, cache cache.Cache) AccessTokenHandle {
+func NewWorkCorpChainAccessToken(parentCorpAccessTokenHandle AccessTokenHandle, chainCorpId string, agentId int, cacheKeyPrefix string, bizType int, cache cache.Cache) AccessTokenHandle {
 	if cache == nil {
 		panic("cache the not exist")
 	}
@@ -163,7 +163,7 @@ func NewWorkCorpChainAccessToken(parentCorpAccessTokenHandle AccessTokenHandle, 
 	}
 	return &WorkCorpChainAccessToken{
 		parentCorpAccessToken: parentWorkAccessToken,
-		CorpID:                parentWorkAccessToken.CorpID,
+		CorpID:                chainCorpId,
 		AgentID:               agentId,
 		BusinessType:          bizType,
 		cache:                 cache,
