@@ -75,8 +75,12 @@ func (wk *Work) GetContact() *contact.Contact {
 // GetCorpChainContact get contact
 func (wk *Work) GetCorpChainContact(chainCorpId string, agentId, bizType int) *contact.Contact {
 	defaultWorkCorpChainAkHandle := credential.NewWorkCorpChainAccessToken(wk.ctx.AccessTokenHandle, chainCorpId, agentId, credential.CacheKeyWorkPrefix, bizType, wk.ctx.Config.Cache)
+	cfg := &config.Config{
+		CorpID:  chainCorpId,
+		AgentID: agentId,
+	}
 	ctx := &context.Context{
-		Config:            wk.ctx.Config,
+		Config:            cfg,
 		AccessTokenHandle: defaultWorkCorpChainAkHandle,
 	}
 	return contact.NewContact(ctx)
@@ -95,8 +99,12 @@ func (wk *Work) GetCorpMP() *corpmp.CorpMP {
 // GetCorpChain get corp chain
 func (wk *Work) GetCorpChain(chainCorpId string, agentId, bizType int) *corpchain.CorpChain {
 	defaultWorkCorpChainAkHandle := credential.NewWorkCorpChainAccessToken(wk.ctx.AccessTokenHandle, chainCorpId, agentId, credential.CacheKeyWorkPrefix, bizType, wk.ctx.Config.Cache)
+	cfg := &config.Config{
+		CorpID:  chainCorpId,
+		AgentID: agentId,
+	}
 	ctx := &context.Context{
-		Config:            wk.ctx.Config,
+		Config:            cfg,
 		AccessTokenHandle: defaultWorkCorpChainAkHandle,
 	}
 	return corpchain.NewCorpChain(ctx)
