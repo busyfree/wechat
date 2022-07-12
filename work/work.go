@@ -79,6 +79,15 @@ func (wk *Work) GetCorpChainContact(chainCorpId string, agentId, bizType int) *c
 		CorpID:  chainCorpId,
 		AgentID: agentId,
 	}
+	if len(cfg.QYAPIDomain) == 0 {
+		cfg.QYAPIDomain = workDefaultApiDomain
+	}
+	if len(cfg.OpenQYAPIDomain) == 0 {
+		cfg.OpenQYAPIDomain = openWorkDefaultApiDomain
+	}
+	if len(cfg.OpenAPIDomain) == 0 {
+		cfg.OpenAPIDomain = openDefaultApiDomain
+	}
 	ctx := &context.Context{
 		Config:            cfg,
 		AccessTokenHandle: defaultWorkCorpChainAkHandle,
@@ -102,6 +111,15 @@ func (wk *Work) GetCorpChain(chainCorpId string, agentId, bizType int) *corpchai
 	cfg := &config.Config{
 		CorpID:  chainCorpId,
 		AgentID: agentId,
+	}
+	if len(cfg.QYAPIDomain) == 0 {
+		cfg.QYAPIDomain = workDefaultApiDomain
+	}
+	if len(cfg.OpenQYAPIDomain) == 0 {
+		cfg.OpenQYAPIDomain = openWorkDefaultApiDomain
+	}
+	if len(cfg.OpenAPIDomain) == 0 {
+		cfg.OpenAPIDomain = openDefaultApiDomain
 	}
 	ctx := &context.Context{
 		Config:            cfg,
