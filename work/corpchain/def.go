@@ -14,11 +14,11 @@ import (
 )
 
 type ReqListAppShareInfo struct {
-	AgentId int    `json:"agentid"`
-	BizType int    `json:"business_type"`
-	CorpId  string `json:"corpid"`
-	Limit   int    `json:"limit"`
-	Cursor  string `json:"cursor"`
+	AgentId *int    `json:"agentid"`
+	BizType *int    `json:"business_type"`
+	CorpId  *string `json:"corpid"`
+	Limit   *int    `json:"limit"`
+	Cursor  *string `json:"cursor"`
 }
 
 type RespListAppShareInfo struct {

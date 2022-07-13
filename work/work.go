@@ -39,7 +39,7 @@ func NewWork(cfg *config.Config) *Work {
 	if len(cfg.OpenAPIDomain) == 0 {
 		cfg.OpenAPIDomain = openDefaultApiDomain
 	}
-	defaultAkHandle := credential.NewWorkAccessToken(cfg.CorpID, cfg.CorpSecret, credential.CacheKeyWorkPrefix, cfg.Cache)
+	defaultAkHandle := credential.NewWorkAccessToken(cfg.CorpID, cfg.AgentID, cfg.CorpSecret, credential.CacheKeyWorkPrefix, cfg.Cache)
 	ctx := &context.Context{
 		Config:            cfg,
 		AccessTokenHandle: defaultAkHandle,
