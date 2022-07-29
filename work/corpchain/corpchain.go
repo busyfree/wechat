@@ -1,12 +1,3 @@
-/*
- * Copyright  (c) 2022 MS. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * File:    corpchain.go
- * Created: 2022/6/7 11:40:41
- * Authors: MS<geek.snail@qq.com>
- */
-
 package corpchain
 
 import (
