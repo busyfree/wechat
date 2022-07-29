@@ -6,7 +6,7 @@ import (
 )
 
 type OA struct {
-	*context.Context
+	ctx *context.Context
 }
 
 func NewOA(ctx *context.Context) *OA {
@@ -15,6 +15,6 @@ func NewOA(ctx *context.Context) *OA {
 	}
 }
 
-func (c *OA) GetCheckIn(ctx *context.Context) *checkin.OACheckIn {
-	return checkin.NewOACheckIn(ctx)
+func (c *OA) GetCheckIn() *checkin.OACheckIn {
+	return checkin.NewOACheckIn(c.ctx)
 }

@@ -6,8 +6,8 @@ import (
 
 type GetHardwareCheckinDataReq struct {
 	FilterType *int     `json:"filter_type"`
-	Starttime  int64    `json:"starttime"`
-	Endtime    int64    `json:"endtime"`
+	StartTime  int64    `json:"starttime"`
+	EndTime    int64    `json:"endtime"`
 	UserIdList []string `json:"useridlist"`
 }
 
