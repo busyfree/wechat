@@ -38,8 +38,7 @@ func (r *Client) CustomerBatchGet(options CustomerBatchGetOptions) (info Custome
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(customerBatchGetAddr, accessToken), options)

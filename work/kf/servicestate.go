@@ -39,8 +39,7 @@ func (r *Client) ServiceStateGet(options ServiceStateGetOptions) (info ServiceSt
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(serviceStateGetAddr, accessToken), options)
@@ -76,8 +75,7 @@ func (r *Client) ServiceStateTrans(options ServiceStateTransOptions) (info Servi
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(serviceStateTransAddr, accessToken), options)

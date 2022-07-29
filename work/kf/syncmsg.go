@@ -45,8 +45,7 @@ func (r *Client) SyncMsg(options SyncMsgOptions) (info SyncMsgSchema, err error)
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(syncMsgAddr, accessToken), options)

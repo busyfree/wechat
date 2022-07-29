@@ -38,8 +38,7 @@ func (r *Client) AccountAdd(options AccountAddOptions) (info AccountAddSchema, e
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(accountAddAddr, accessToken), options)
@@ -66,8 +65,7 @@ func (r *Client) AccountDel(options AccountDelOptions) (info util.CommonError, e
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(accountDelAddr, accessToken), options)
@@ -96,8 +94,7 @@ func (r *Client) AccountUpdate(options AccountUpdateOptions) (info util.CommonEr
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(accountUpdateAddr, accessToken), options)
@@ -132,8 +129,7 @@ func (r *Client) AccountList() (info AccountListSchema, err error) {
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(accountListAddr, accessToken))
@@ -171,8 +167,7 @@ func (r *Client) AddContactWay(options AddContactWayOptions) (info AddContactWay
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(addContactWayAddr, accessToken), options)
