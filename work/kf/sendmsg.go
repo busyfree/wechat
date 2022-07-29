@@ -30,8 +30,7 @@ func (r *Client) SendMsg(options interface{}) (info SendMsgSchema, err error) {
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(sendMsgAddr, accessToken), options)

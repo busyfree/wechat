@@ -34,8 +34,7 @@ func (r *Client) UpgradeServiceConfig() (info UpgradeServiceConfigSchema, err er
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(upgradeServiceConfigAddr, accessToken))
@@ -72,8 +71,7 @@ func (r *Client) UpgradeService(options UpgradeServiceOptions) (info util.Common
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(upgradeService, accessToken), options)
@@ -106,8 +104,7 @@ func (r *Client) UpgradeMemberService(options UpgradeMemberServiceOptions) (info
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(upgradeService, accessToken), options)
@@ -169,8 +166,7 @@ func (r *Client) UpgradeServiceCancel(options UpgradeServiceCancelOptions) (info
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(upgradeServiceCancel, accessToken), options)

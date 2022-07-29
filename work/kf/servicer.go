@@ -37,8 +37,7 @@ func (r *Client) ReceptionistAdd(options ReceptionistOptions) (info Receptionist
 		accessToken string
 		data        []byte
 	)
-	accessToken, err = r.ctx.GetAccessToken()
-	if err != nil {
+	if accessToken, err = r.ctx.GetAccessToken(); err != nil {
 		return
 	}
 	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(receptionistAddAddr, accessToken), options)
