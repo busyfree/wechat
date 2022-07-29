@@ -11,6 +11,7 @@ import (
 	"github.com/silenceper/wechat/v2/work/externalcontact"
 	"github.com/silenceper/wechat/v2/work/kf"
 	"github.com/silenceper/wechat/v2/work/msgaudit"
+	"github.com/silenceper/wechat/v2/work/oa"
 	"github.com/silenceper/wechat/v2/work/oauth"
 )
 
@@ -131,4 +132,8 @@ func (wk *Work) GetCorpChain(chainCorpId string, agentId, bizType int) *corpchai
 // GetExternalContact get external_contact
 func (wk *Work) GetExternalContact() *externalcontact.Client {
 	return externalcontact.NewClient(wk.ctx)
+}
+
+func (wk *Work) GetOA() *oa.OA {
+	return oa.NewOA(wk.ctx)
 }
