@@ -2,6 +2,7 @@ package work
 
 import (
 	"github.com/silenceper/wechat/v2/credential"
+	"github.com/silenceper/wechat/v2/work/addresslist"
 	"github.com/silenceper/wechat/v2/work/agent"
 	"github.com/silenceper/wechat/v2/work/config"
 	"github.com/silenceper/wechat/v2/work/contact"
@@ -136,4 +137,9 @@ func (wk *Work) GetExternalContact() *externalcontact.Client {
 
 func (wk *Work) GetOA() *oa.OA {
 	return oa.NewOA(wk.ctx)
+}
+
+// GetAddressList get address_list
+func (wk *Work) GetAddressList() *addresslist.Client {
+	return addresslist.NewClient(wk.ctx)
 }
