@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	redirectOauthURL       = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect"
+	redirectOauthURL       = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s&forcePopup=%t&forceSnapShot=%t#wechat_redirect"
 	webAppRedirectOauthURL = "https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect"
 	accessTokenURL         = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
 	refreshAccessTokenURL  = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s"
@@ -32,10 +32,10 @@ func NewOauth(context *context.Context) *Oauth {
 }
 
 // GetRedirectURL 获取跳转的url地址
-func (oauth *Oauth) GetRedirectURL(redirectURI, scope, state string) (string, error) {
+func (oauth *Oauth) GetRedirectURL(redirectURI, scope, state string, forcePopup, forceSnapShot bool) (string, error) {
 	// url encode
 	urlStr := url.QueryEscape(redirectURI)
-	return fmt.Sprintf(redirectOauthURL, oauth.AppID, urlStr, scope, state), nil
+	return fmt.Sprintf(redirectOauthURL, oauth.AppID, urlStr, scope, state, forcePopup, forceSnapShot), nil
 }
 
 // GetWebAppRedirectURL 获取网页应用跳转的url地址
@@ -45,8 +45,8 @@ func (oauth *Oauth) GetWebAppRedirectURL(redirectURI, scope, state string) (stri
 }
 
 // Redirect 跳转到网页授权
-func (oauth *Oauth) Redirect(writer http.ResponseWriter, req *http.Request, redirectURI, scope, state string) error {
-	location, err := oauth.GetRedirectURL(redirectURI, scope, state)
+func (oauth *Oauth) Redirect(writer http.ResponseWriter, req *http.Request, redirectURI, scope, state string, forcePopup, forceSnapShot bool) error {
+	location, err := oauth.GetRedirectURL(redirectURI, scope, state, forcePopup, forceSnapShot)
 	if err != nil {
 		return err
 	}
