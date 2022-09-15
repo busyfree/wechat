@@ -9,7 +9,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -38,7 +37,7 @@ func HTTPGetContext(ctx context.Context, uri string) ([]byte, error) {
 	if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("http get error : uri=%v , statusCode=%v", uri, response.StatusCode)
 	}
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
 
 // HTTPPost post 请求
@@ -67,7 +66,7 @@ func HTTPPostContext(ctx context.Context, uri string, data []byte, header map[st
 	if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("http post error : uri=%v , statusCode=%v", uri, response.StatusCode)
 	}
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
 
 // PostJSON post json 数据请求
@@ -88,7 +87,7 @@ func PostJSON(uri string, obj interface{}) ([]byte, error) {
 	if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("http get error : uri=%v , statusCode=%v", uri, response.StatusCode)
 	}
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
 
 func PostJSONContext(ctx context.Context, uri string, obj interface{}) ([]byte, error) {
@@ -134,7 +133,7 @@ func PostJSONWithRespContentType(uri string, obj interface{}) ([]byte, string, e
 	if response.StatusCode != http.StatusOK {
 		return nil, "", fmt.Errorf("http get error : uri=%v , statusCode=%v", uri, response.StatusCode)
 	}
-	responseData, err := ioutil.ReadAll(response.Body)
+	responseData, err := io.ReadAll(response.Body)
 	contentType := response.Header.Get("Content-Type")
 	return responseData, contentType, err
 }
@@ -207,7 +206,7 @@ func PostMultipartForm(fields []MultipartFormField, uri string) (respBody []byte
 	if resp.StatusCode != http.StatusOK {
 		return nil, err
 	}
-	respBody, err = ioutil.ReadAll(resp.Body)
+	respBody, err = io.ReadAll(resp.Body)
 	return
 }
 
@@ -228,13 +227,13 @@ func PostXML(uri string, obj interface{}) ([]byte, error) {
 	if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("http code error : uri=%v , statusCode=%v", uri, response.StatusCode)
 	}
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
 
 // httpWithTLS CA证书
 func httpWithTLS(rootCa, key string) (*http.Client, error) {
 	var client *http.Client
-	certData, err := ioutil.ReadFile(rootCa)
+	certData, err := os.ReadFile(rootCa)
 	if err != nil {
 		return nil, fmt.Errorf("unable to find cert path=%s, error=%v", rootCa, err)
 	}
@@ -293,5 +292,5 @@ func PostXMLWithTLS(uri string, obj interface{}, ca, key string) ([]byte, error)
 	if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("http code error : uri=%v , statusCode=%v", uri, response.StatusCode)
 	}
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
