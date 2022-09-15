@@ -196,3 +196,31 @@ type GetAsyncExportJobResultResp struct {
 		Md5  string      `json:"md5"`
 	} `json:"data_list"`
 }
+
+type GetUserIdsReq struct {
+	Cursor *string `json:"cursor"`
+	Limit  *int    `json:"limit"`
+}
+
+type GetUserIdsResp struct {
+	util.CommonError
+	NextCursor string `json:"next_cursor"`
+	DeptUser   []struct {
+		Userid     string `json:"userid"`
+		Department int    `json:"department"`
+	} `json:"dept_user"`
+}
+
+type GetUserIdByPhoneReq struct {
+	Mobile string `json:"mobile"`
+}
+
+type GetUserIdByResp struct {
+	util.CommonError
+	Userid string `json:"userid"`
+}
+
+type GetUserIdByEmailReq struct {
+	Email     string `json:"email"`
+	EmailType *int   `json:"email_type"`
+}

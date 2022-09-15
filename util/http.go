@@ -111,7 +111,7 @@ func PostJSONContext(ctx context.Context, uri string, obj interface{}) ([]byte, 
 	if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("http get error : uri=%v , statusCode=%v", uri, response.StatusCode)
 	}
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
 
 // PostJSONWithRespContentType post json数据请求，且返回数据类型

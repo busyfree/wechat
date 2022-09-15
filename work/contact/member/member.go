@@ -30,6 +30,9 @@ const (
 	userAsyncExportSimpleUserAddr     = "/cgi-bin/export/simple_user?access_token=%s"
 	userAsyncExportUserAddr           = "/cgi-bin/export/user?access_token=%s"
 	userAsyncExportTagUsersAddr       = "/cgi-bin/export/taguser?access_token=%s"
+	userGetListIdAddr                 = "/cgi-bin/user/list_id?access_token=%s"
+	getUserIdByPhoneAddr              = "/cgi-bin/user/getuserid?access_token=%s"
+	getUserIdByEmailAddr              = "/cgi-bin/user/get_userid_by_email?access_token=%s"
 )
 
 type Member struct {
@@ -512,6 +515,82 @@ func (r *Member) GetAsyncExportJobResult(jobId string) (info GetAsyncExportJobRe
 		return
 	}
 	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(getAsyncExportJobResultAddr, accessToken, jobId))
+	if err != nil {
+		return
+	}
+	if err = json.Unmarshal(data, &info); err != nil {
+		return
+	}
+	if info.ErrCode != 0 {
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
+	}
+	return info, nil
+}
+
+// GetUserIds 获取成员ID列表
+// https://developer.work.weixin.qq.com/document/path/96067
+func (r *Member) GetUserIds(options GetUserIdsReq) (info GetUserIdsResp, err error) {
+	var (
+		accessToken string
+		data        []byte
+	)
+	if options.Limit != nil && (*options.Limit > 10000 || *options.Limit < 1) {
+		err = errors.New("limit value error, should be in 1 ~ 10000")
+		return
+	}
+	accessToken, err = r.ctx.GetAccessToken()
+	if err != nil {
+		return
+	}
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(userGetListIdAddr, accessToken), options)
+	if err != nil {
+		return
+	}
+	if err = json.Unmarshal(data, &info); err != nil {
+		return
+	}
+	if info.ErrCode != 0 {
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
+	}
+	return info, nil
+}
+
+// GetUserIdByPhone 手机号获取userid
+// https://developer.work.weixin.qq.com/document/path/95402
+func (r *Member) GetUserIdByPhone(options GetUserIdByPhoneReq) (info GetUserIdByResp, err error) {
+	var (
+		accessToken string
+		data        []byte
+	)
+	accessToken, err = r.ctx.GetAccessToken()
+	if err != nil {
+		return
+	}
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(getUserIdByPhoneAddr, accessToken), options)
+	if err != nil {
+		return
+	}
+	if err = json.Unmarshal(data, &info); err != nil {
+		return
+	}
+	if info.ErrCode != 0 {
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
+	}
+	return info, nil
+}
+
+// GetUserIdByEmail 邮箱获取userid
+// https://developer.work.weixin.qq.com/document/path/95895
+func (r *Member) GetUserIdByEmail(options GetUserIdByEmailReq) (info GetUserIdByResp, err error) {
+	var (
+		accessToken string
+		data        []byte
+	)
+	accessToken, err = r.ctx.GetAccessToken()
+	if err != nil {
+		return
+	}
+	data, err = util.PostJSON(r.ctx.GetQYAPIDomain()+fmt.Sprintf(getUserIdByEmailAddr, accessToken), options)
 	if err != nil {
 		return
 	}

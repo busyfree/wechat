@@ -20,6 +20,7 @@ const (
 	getAsyncJobResultAddr               = "/cgi-bin/batch/getresult?access_token=%s&jobid=%s"
 	departmentAsyncExportAddr           = "/cgi-bin/export/department?access_token=%s"
 	getAsyncExportJobResultAddr         = "/cgi-bin/export/get_result?access_token=%s&jobid=%s"
+	getDepartmentSimpleListAddr         = "/cgi-bin/department/simplelist?access_token=%s"
 )
 
 type Department struct {
@@ -242,6 +243,34 @@ func (r *Department) GetAsyncExportJobResult(jobId string) (info GetAsyncExportJ
 		return
 	}
 	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + fmt.Sprintf(getAsyncExportJobResultAddr, accessToken, jobId))
+	if err != nil {
+		return
+	}
+	if err = json.Unmarshal(data, &info); err != nil {
+		return
+	}
+	if info.ErrCode != 0 {
+		return info, xerror.NewSDKErr(info.ErrCode, info.ErrMsg)
+	}
+	return info, nil
+}
+
+// GetDepartmentSimpleList 获取子部门ID列表
+// https://developer.work.weixin.qq.com/document/path/95350
+func (r *Department) GetDepartmentSimpleList(depId int) (info GetDepartmentSimpleListResp, err error) {
+	var (
+		accessToken string
+		data        []byte
+	)
+	accessToken, err = r.ctx.GetAccessToken()
+	if err != nil {
+		return
+	}
+	endPoint := fmt.Sprintf(getDepartmentSimpleListAddr, accessToken)
+	if depId > 0 {
+		endPoint += fmt.Sprintf("&id=%d", depId)
+	}
+	data, err = util.HTTPGet(r.ctx.GetQYAPIDomain() + endPoint)
 	if err != nil {
 		return
 	}

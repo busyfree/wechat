@@ -83,3 +83,12 @@ type GetAsyncExportJobResultResp struct {
 		Md5  string      `json:"md5"`
 	} `json:"data_list"`
 }
+
+type GetDepartmentSimpleListResp struct {
+	util.CommonError
+	DepartmentIds []struct {
+		Id       int `json:"id"`
+		Parentid int `json:"parentid"`
+		Order    int `json:"order"`
+	} `json:"department_id"`
+}
